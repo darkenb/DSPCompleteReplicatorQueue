@@ -1,9 +1,9 @@
 {
-    "name": "DSPCompleteReplicatorQueue",
-    "version_number": "1.0.0",
-    "website_url": "https://github.com/KULLANICI_ADIN/DSPCompleteReplicatorQueue",
-    "description": "Adds a 'Complete Queue' button to the Replicator window. Instantly completes all items in the replication queue and adds them to your inventory.",
-    "dependencies": [
-        "BepInEx-BepInExPack_DSP-5.4.17.0"
-    ]
+  "name": "DSPCompleteReplicatorQueue",
+  "version_number": "1.0.3",
+  "website_url": "https://github.com/darkenb/DSPCompleteReplicatorQueue",
+  "description": "Complete the current Replicator queue through native production, preserving intermediate products and inventory handling.",
+  "dependencies": [
+    "xiaoye97-BepInEx-5.4.17"
+  ]
 }

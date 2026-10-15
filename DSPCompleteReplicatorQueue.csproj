@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version='1.0' encoding='utf-8'?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0" DefaultTargets="Build">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -11,8 +11,11 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
-    <DSPGamePath>D:\Games\Dyson Sphere Program</DSPGamePath>
-    <BepInExCorePath>C:\Users\$(USERNAME)\AppData\Roaming\com.kesomannen.gale\dyson-sphere-program\profiles\DSP\BepInEx\core</BepInExCorePath>
+    <DSPGamePath Condition="'$(DSPGamePath)' == ''">D:\Games\Dyson Sphere Program</DSPGamePath>
+    <BepInExCorePath Condition="'$(BepInExCorePath)' == ''">$(APPDATA)\com.kesomannen.gale\dyson-sphere-program\profiles\Default\BepInEx\core</BepInExCorePath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>12.0</LangVersion>
+    <GameAssemblyPath Condition="'$(GameAssemblyPath)' == ''">$(DSPGamePath)\DSPGAME_Data\Managed\Assembly-CSharp.dll</GameAssemblyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -44,28 +47,8 @@
       <HintPath>$(BepInExCorePath)\BepInEx.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="BepInEx.Preloader">
-      <HintPath>$(BepInExCorePath)\BepInEx.Preloader.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="HarmonyXInterop">
-      <HintPath>$(BepInExCorePath)\HarmonyXInterop.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="MonoMod.RuntimeDetour">
-      <HintPath>$(BepInExCorePath)\MonoMod.RuntimeDetour.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="MonoMod.Utils">
-      <HintPath>$(BepInExCorePath)\MonoMod.Utils.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Assembly-CSharp" Condition="Exists('$(DSPGamePath)\DSPGAME_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll')">
-      <HintPath>$(DSPGamePath)\DSPGAME_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Assembly-CSharp" Condition="!Exists('$(DSPGamePath)\DSPGAME_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll')">
-      <HintPath>$(DSPGamePath)\DSPGAME_Data\Managed\Assembly-CSharp.dll</HintPath>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(GameAssemblyPath)</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine">
@@ -103,6 +86,11 @@
     <Compile Include="Main.cs" />
     <Compile Include="InstantCraft.cs" />
     <Compile Include="UI.cs" />
+    <Compile Include="QueueCompletion.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="ValidateGameReferences" BeforeTargets="PrepareForBuild">
+    <Error Condition="!Exists('$(GameAssemblyPath)')" Text="Game assembly not found. Set DSPGamePath or GameAssemblyPath to your installed game/reference." />
+    <Error Condition="!Exists('$(BepInExCorePath)\BepInEx.dll')" Text="BepInEx.dll not found. Set BepInExCorePath to the BepInEx core directory." />
+  </Target>
 </Project>

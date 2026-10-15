@@ -1,43 +1,35 @@
 @echo off
+setlocal
 cd /d "%~dp0"
 
-echo DSPCompleteReplicatorQueue Build + Install
-echo =================================
-
-echo [1/4] Eski build temizleniyor...
-if exist "bin" (
-    rmdir /S /Q "bin"
-    echo      bin klasoru silindi.
-)
-
-set TARGET=%APPDATA%\com.kesomannen.gale\dyson-sphere-program\profiles\DSP\BepInEx\plugins\DSPCompleteReplicatorQueue
-if exist "%TARGET%" (
-    rmdir /S /Q "%TARGET%"
-    echo      DSPCompleteReplicatorQueue klasoru silindi.
-)
-
-echo [2/4] Derleniyor...
-dotnet build DSPCompleteReplicatorQueue.csproj -c Release
-
-if %ERRORLEVEL% NEQ 0 (
-    echo.
-    echo [HATA] Derleme basarisiz!
-    pause
+echo Building DSPCompleteReplicatorQueue 1.0.3...
+dotnet build "DSPCompleteReplicatorQueue.csproj" -c Release
+if errorlevel 1 (
+    echo Build failed. No installed files were changed.
     exit /b 1
 )
 
-echo [3/4] Plugin klasoru olusturuluyor...
-mkdir "%TARGET%"
-
-echo [4/4] DLL kopyalaniyor...
-copy /Y "bin\Release\DSPCompleteReplicatorQueue.dll" "%TARGET%\DSPCompleteReplicatorQueue.dll"
-
-if %ERRORLEVEL% EQU 0 (
-    echo.
-    echo [OK] Basarili!
-    echo DLL konumu: %TARGET%\DSPCompleteReplicatorQueue.dll
-) else (
-    echo [HATA] Kopyalama basarisiz!
+if "%~1"=="" (
+    echo Build complete: bin\Release\DSPCompleteReplicatorQueue.dll
+    echo To install, close the game and run this script with the existing plugin directory as its first argument.
+    exit /b 0
 )
 
-pause
+set "TARGET_DIR=%~f1"
+if not exist "%TARGET_DIR%" mkdir "%TARGET_DIR%"
+if errorlevel 1 exit /b 1
+if exist "%TARGET_DIR%\DSPCompleteReplicatorQueue.dll" (
+    copy /Y "%TARGET_DIR%\DSPCompleteReplicatorQueue.dll" "%TARGET_DIR%\DSPCompleteReplicatorQueue.dll.bak" >nul
+    if errorlevel 1 (
+        echo Could not back up the installed DLL. Installation cancelled.
+        exit /b 1
+    )
+)
+copy /Y "bin\Release\DSPCompleteReplicatorQueue.dll" "%TARGET_DIR%\DSPCompleteReplicatorQueue.dll" >nul
+if errorlevel 1 (
+    if exist "%TARGET_DIR%\DSPCompleteReplicatorQueue.dll.bak" copy /Y "%TARGET_DIR%\DSPCompleteReplicatorQueue.dll.bak" "%TARGET_DIR%\DSPCompleteReplicatorQueue.dll" >nul
+    echo Installation failed. The previous DLL was retained or restored from its backup.
+    exit /b 1
+)
+echo Installed: %TARGET_DIR%\DSPCompleteReplicatorQueue.dll
+exit /b 0

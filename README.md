@@ -1,29 +1,57 @@
-# DSP Complete Replicator Queue
+# DSP Complete Replicator Queue 1.0.3
 
 Adds a **Complete Queue** button to the Replicator window in Dyson Sphere Program.
 
+The analysis and proposed fixes in this release were developed with assistance from the GPT 6.1 Sol model. English documentation accompanies the code to explain the changes and available validation results.
+
 ## Features
 
-- Instantly completes all items currently in the replication queue
-- Adds the completed items directly to your inventory
-- If your inventory is full, overflow items are dropped to the ground (vanilla behavior)
-- Button is located in the top-right area of the Replicator window
-- Button is disabled (grayed out) when the queue is empty
+- Complete the tasks present when the button is pressed without waiting for normal crafting time.
+- Preserve native recipe inputs, intermediate products, inventory/delivery handling, overflow and production events.
+- Process large queues over multiple frames and stop safely if tasks change or production cannot proceed.
 
-## Installation
+## Requirements
 
-### Automatic (recommended)
-Install via [Gale Mod Manager](https://thunderstore.io/c/dyson-sphere-program/p/Kesomannen/GaleModManager/) or [r2modman](https://thunderstore.io/c/dyson-sphere-program/p/ebkr/r2modman/).
+- Dyson Sphere Program with BepInEx installed.
+- DSPReplicatorPlus is optional.
 
-### Manual
-1. Install [BepInEx for DSP](https://thunderstore.io/c/dyson-sphere-program/p/xiaoye97/BepInEx/)
-2. Copy `DSPCompleteReplicatorQueue.dll` to `BepInEx/plugins/DSPCompleteReplicatorQueue/`
+## Install manually
 
-## Compatibility
+1. Close the game.
+2. Extract this ZIP into a temporary folder.
+3. Copy the `DSPCompleteReplicatorQueue` folder, which contains the DLL, into the game's or active mod profile's `BepInEx/plugins/` directory.
+4. The final DLL path should be `BepInEx/plugins/DSPCompleteReplicatorQueue/DSPCompleteReplicatorQueue.dll`.
 
-**DSPReplicatorPlus** — This mod was developed and tested alongside a patched version of DSPReplicatorPlus. The current version of DSPReplicatorPlus available on Thunderstore may not work correctly with the latest game version. If you encounter issues, try running this mod without DSPReplicatorPlus—it functions fully as a standalone mod. I’ve sent the updated files I modified to the DSPReplicatorPlus developer, but I haven’t heard back yet. If you’re wondering why this specific mod, it’s because it adds buttons to the same interface.
+## Update an existing installation
 
-## Changelog
+1. Close the game and back up your current mod DLL.
+2. Replace the existing `DSPCompleteReplicatorQueue.dll` with the DLL from this ZIP, using the folder where the previous DLL is already installed.
+3. Keep a single installed DLL for this mod. If your manager placed it inside a package folder, replace it there rather than creating a second copy elsewhere.
+4. Start the game, open the Replicator, queue a recipe, and check the **Complete Queue** button.
 
-### 1.0.0
-- Initial release
+For a manager-owned profile, use the manager's local import/update feature when supported so its package records stay consistent. The manifest in this ZIP declares version 1.0.3.
+
+## Changes in 1.0.3
+
+- Use native production instead of granting products directly and clearing the queue.
+- Preserve intermediate items, delivery/overflow handling, statistics and events.
+- Avoid duplicate overflow transfers and repeated activation.
+- Stop safely on changed queues, missing inputs or invalid tasks.
+- Limit accelerated work per frame and improve button lifecycle cleanup.
+
+
+## Build from source
+
+Use a current .NET SDK and the .NET Framework 4.7.2 Developer Pack. Game, Unity and BepInEx assemblies are external references and are not included in the source download.
+
+The project defaults to `D:\Games\Dyson Sphere Program` and the Gale Default profile's BepInEx core. Override `DSPGamePath`, `BepInExCorePath` or `GameAssemblyPath` for your installation, for example:
+
+```text
+dotnet build DSPCompleteReplicatorQueue.csproj -c Release "-p:DSPGamePath=D:\Games\Dyson Sphere Program" "-p:BepInExCorePath=C:\path\to\BepInEx\core"
+```
+
+Output: `bin/Release/DSPCompleteReplicatorQueue.dll`.
+
+`build_and_install.bat` builds only when run without arguments. After closing the game, an explicit plugin-directory argument enables installation; it builds first, backs up an existing DLL, and does not delete plugin directories.
+
+The project compiles `Main.cs`, `InstantCraft.cs`, `UI.cs` and `QueueCompletion.cs`. Upload all source files from the source ZIP to the repository root so the new queue implementation is included.
