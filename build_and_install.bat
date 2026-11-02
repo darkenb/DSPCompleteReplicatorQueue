@@ -2,7 +2,7 @@
 setlocal
 cd /d "%~dp0"
 
-echo Building DSPCompleteReplicatorQueue 1.0.3...
+echo Building DSPCompleteReplicatorQueue 1.0.4...
 dotnet build "DSPCompleteReplicatorQueue.csproj" -c Release
 if errorlevel 1 (
     echo Build failed. No installed files were changed.

@@ -1,6 +1,6 @@
 {
   "name": "DSPCompleteReplicatorQueue",
-  "version_number": "1.0.3",
+  "version_number": "1.0.4",
   "website_url": "https://github.com/darkenb/DSPCompleteReplicatorQueue",
   "description": "Complete the current Replicator queue through native production, preserving intermediate products and inventory handling.",
   "dependencies": [

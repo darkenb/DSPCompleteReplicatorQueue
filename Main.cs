@@ -6,11 +6,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [assembly: AssemblyVersion("0.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.3.0")]
+[assembly: AssemblyFileVersion("1.0.4.0")]
 
 namespace DSPCompleteReplicatorQueue
 {
-    [BepInPlugin(Guid, "DSPCompleteReplicatorQueue", "1.0.3")]
+    [BepInPlugin(Guid, "DSPCompleteReplicatorQueue", "1.0.4")]
     [BepInDependency("Appun.DSP.plugin.DSPReplicatorPlus", BepInDependency.DependencyFlags.SoftDependency)]
     public sealed class Main : BaseUnityPlugin
     {
@@ -31,7 +31,7 @@ namespace DSPCompleteReplicatorQueue
         {
             if (Busy) return;
             completion = new QueueCompletion(forge);
-            if (!completion.Active && completion.StopReason != null) Logger.LogWarning(completion.StopReason);
+            if (!completion.Active && completion.StopReason != null) ReportStop(completion.StopReason);
         }
 
         private void Update()
@@ -50,8 +50,14 @@ namespace DSPCompleteReplicatorQueue
             if (ReferenceEquals(current, completion) && !current.Active)
             {
                 Logger.LogInfo("Complete Queue: " + current.CompletedCycles + " native production cycles completed.");
-                if (current.StopReason != null) Logger.LogWarning(current.StopReason);
+                if (current.StopReason != null) ReportStop(current.StopReason);
             }
+        }
+
+        private void ReportStop(string reason)
+        {
+            Logger.LogWarning(reason);
+            UIRealtimeTip.Popup("Complete Queue: " + reason);
         }
 
         internal void Cancel()
