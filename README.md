@@ -34,3 +34,7 @@ dotnet build DSPCompleteReplicatorQueue.csproj -c Release "-p:DSPGamePath=D:\Gam
 Output: `bin/Release/DSPCompleteReplicatorQueue.dll`.
 
 `build_and_install.bat` builds only when run without arguments. After closing the game, an explicit plugin-directory argument enables installation; it builds first, backs up an existing DLL, and does not delete plugin directories.
+
+## License
+
+MIT, see [LICENSE](LICENSE).
