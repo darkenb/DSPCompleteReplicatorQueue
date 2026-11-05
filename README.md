@@ -22,6 +22,20 @@ Install with a mod manager such as Gale or r2modman.
 
 To install by hand, copy `DSPCompleteReplicatorQueue.dll` into `BepInEx/plugins/DSPCompleteReplicatorQueue/`. Keep a single copy of the DLL.
 
-## Source
+## Build from source
 
-Source code and build instructions: [github.com/darkenb/DSPCompleteReplicatorQueue](https://github.com/darkenb/DSPCompleteReplicatorQueue)
+Use a current .NET SDK and the .NET Framework 4.7.2 Developer Pack. Game, Unity and BepInEx assemblies are external references and are not included in the source download.
+
+The project defaults to `D:\Games\Dyson Sphere Program` and the Gale Default profile's BepInEx core. Override `DSPGamePath`, `BepInExCorePath` or `GameAssemblyPath` for your installation, for example:
+
+```text
+dotnet build DSPCompleteReplicatorQueue.csproj -c Release "-p:DSPGamePath=D:\Games\Dyson Sphere Program" "-p:BepInExCorePath=C:\path\to\BepInEx\core"
+```
+
+Output: `bin/Release/DSPCompleteReplicatorQueue.dll`.
+
+`build_and_install.bat` builds only when run without arguments. After closing the game, an explicit plugin-directory argument enables installation; it builds first, backs up an existing DLL, and does not delete plugin directories.
+
+## License
+
+MIT, see [LICENSE](LICENSE).
