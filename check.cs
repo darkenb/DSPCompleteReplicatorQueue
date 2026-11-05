@@ -97,6 +97,11 @@ public static class Check
         c = new QueueCompletion(f);
         c.ProcessBatch(1, 1, 60000);
         Expect("partial progress kept", t.count == 1 && t.tick == 50000, $"count={t.count} tick={t.tick}");
+
+        // The hotkey works with the window closed, so an empty queue must give the player a reason.
+        f = Forge();
+        c = new QueueCompletion(f);
+        Expect("empty queue reports", !c.Active && c.StopReason != null, c.StopReason);
         return failed;
     }
 }

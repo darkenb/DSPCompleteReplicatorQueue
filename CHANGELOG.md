@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.5
+
+- Added a configurable hotkey (default Shift+Y) that completes the queue while the Replicator window is closed.
+- Show a message when the queue is empty.
+
 ## 1.0.4
 
 - Show an in-game message when completion stops early (missing inputs, changed queue). It used to appear only in the log.

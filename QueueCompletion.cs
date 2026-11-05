@@ -18,7 +18,11 @@ namespace DSPCompleteReplicatorQueue
         public QueueCompletion(MechaForge forge)
         {
             Forge = forge;
-            if (forge == null || forge.tasks == null || forge.tasks.Count == 0) return;
+            if (forge == null || forge.tasks == null || forge.tasks.Count == 0)
+            {
+                Stop("Replication queue is empty.");
+                return;
+            }
             for (int i = 0; i < forge.tasks.Count; i++)
             {
                 ForgeTask task = forge.tasks[i];

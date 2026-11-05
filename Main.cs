@@ -1,16 +1,17 @@
 using System;
 using System.Reflection;
 using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
 
 [assembly: AssemblyVersion("0.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.4.0")]
+[assembly: AssemblyFileVersion("1.0.5.0")]
 
 namespace DSPCompleteReplicatorQueue
 {
-    [BepInPlugin(Guid, "DSPCompleteReplicatorQueue", "1.0.4")]
+    [BepInPlugin(Guid, "DSPCompleteReplicatorQueue", "1.0.5")]
     [BepInDependency("Appun.DSP.plugin.DSPReplicatorPlus", BepInDependency.DependencyFlags.SoftDependency)]
     public sealed class Main : BaseUnityPlugin
     {
@@ -18,11 +19,13 @@ namespace DSPCompleteReplicatorQueue
         internal static Main Instance;
         private Harmony harmony;
         private QueueCompletion completion;
+        private ConfigEntry<KeyboardShortcut> hotkey;
         internal bool Busy { get { return completion != null && completion.Active; } }
 
         private void Awake()
         {
             Instance = this;
+            hotkey = Config.Bind("General", "Hotkey", new KeyboardShortcut(KeyCode.Y, KeyCode.LeftShift), "Completes the replication queue, also while the Replicator window is closed.");
             harmony = new Harmony(Guid);
             harmony.PatchAll(typeof(WindowUI));
         }
@@ -36,6 +39,10 @@ namespace DSPCompleteReplicatorQueue
 
         private void Update()
         {
+            // The main menu runs a demo game with its own player, so isRunning alone is not enough.
+            if (hotkey.Value.IsDown() && !VFInput.inputing && GameMain.isRunning && !GameMain.isLoading && !GameMain.isPaused &&
+                !DSPGame.IsMenuDemo && GameMain.mainPlayer != null)
+                Request(GameMain.mainPlayer.mecha.forge);
             if (!Busy) return;
             if (!GameMain.isRunning || GameMain.isLoading || GameMain.mainPlayer == null ||
                 !ReferenceEquals(completion.Forge.player, GameMain.mainPlayer))

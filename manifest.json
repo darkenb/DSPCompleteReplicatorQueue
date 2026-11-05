@@ -1,9 +1,9 @@
 {
-  "name": "DSPCompleteReplicatorQueue",
-  "version_number": "1.0.4",
-  "website_url": "https://github.com/darkenb/DSPCompleteReplicatorQueue",
-  "description": "Complete the current Replicator queue through native production, preserving intermediate products and inventory handling.",
-  "dependencies": [
-    "xiaoye97-BepInEx-5.4.17"
-  ]
+    "name": "DSPCompleteReplicatorQueue",
+    "version_number": "1.0.5",
+    "website_url": "https://github.com/darkenb/DSPCompleteReplicatorQueue",
+    "description": "Complete the current Replicator queue through native production, preserving intermediate products and inventory handling.",
+    "dependencies": [
+        "xiaoye97-BepInEx-5.4.17"
+    ]
 }
